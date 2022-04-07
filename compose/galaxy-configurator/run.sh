@@ -117,11 +117,11 @@ if [ "$IRIDA_OVERWRITE_CONFIG" != "true" ]; then
   echo "IRIDA_OVERWRITE_CONFIG is not true. Skipping configuration of IRIDA"
 else
   irida_configs=( "irida.conf" "web.conf" "static" "templates" "plugins" )
-
   for conf in "${irida_configs[@]}"; do
-    echo "Configuring $conf"
     if [[ "$conf" == *.conf ]] ; then
+      echo "Configuring $conf"
       j2 --customize /customize.py --undefined -o "/tmp/$conf" "/templates/irida/$conf.j2" /base_config.yml
+
       echo "The following changes will be applied to $conf:"
       diff "${IRIDA_CONF_DIR}/$conf" "/tmp/$conf"
       mv -f "/tmp/$conf" "${IRIDA_CONF_DIR}/$conf"
@@ -132,7 +132,7 @@ else
 fi
 
 echo "Releasing all locks (except Galaxy) if it didn't happen already"
-locks=("$SLURM_CONF_DIR" "$HTCONDOR_CONF_DIR" "$PULSAR_CONF_DIR" "$KIND_CONF_DIR")
+locks=("$SLURM_CONF_DIR" "$HTCONDOR_CONF_DIR" "$PULSAR_CONF_DIR" "$KIND_CONF_DIR" "$IRIDA_CONF_DIR")
 for lock in "${locks[@]}"; do
   echo "Unlocking $lock"
   rm "${lock}/configurator.lock"
