@@ -120,8 +120,7 @@ else
   for conf in "${irida_configs[@]}"; do
     if [[ "$conf" == *.conf ]] ; then
       echo "Configuring $conf"
-      j2 --customize /customize.py --undefined -o "/tmp/$conf" "/templates/irida/$conf.j2" /base_config.yml
-
+      j2 --customize customize.py --undefined -o "/tmp/$conf" "templates/irida/$conf.j2" base_config.yml
       echo "The following changes will be applied to $conf:"
       diff "${IRIDA_CONF_DIR}/$conf" "/tmp/$conf"
       mv -f "/tmp/$conf" "${IRIDA_CONF_DIR}/$conf"
