@@ -59,3 +59,8 @@ volumes:
   irida_web_data:
   irida_galaxy_data:      
 
+networks:
+  galaxy:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
