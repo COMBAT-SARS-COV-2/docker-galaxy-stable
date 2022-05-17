@@ -131,6 +131,9 @@ else
   done
 fi
 
+# TODO: IRIDA plugin installation
+
+
 echo "Releasing all locks (except Galaxy) if it didn't happen already"
 locks=("$SLURM_CONF_DIR" "$HTCONDOR_CONF_DIR" "$PULSAR_CONF_DIR" "$KIND_CONF_DIR" "$IRIDA_CONF_DIR")
 for lock in "${locks[@]}"; do
@@ -168,9 +171,18 @@ for conf in "${galaxy_configs[@]}"; do
   mv -f "/tmp/$conf" "${GALAXY_CONF_DIR}/$conf"
 done
 
+# TODO: Install tools into Galaxy (Singularity)
+galaxy_tools_file="tools.yaml"
+echo "Installing galaxy tools"
+python -m workbench download-jar
+python -m workbench extract-jar
+python -m workbench install-tools
+echo "Finished installing galaxy tools"
+
 echo "Finished configuring Galaxy"
 echo "Lock for Galaxy config released"
 rm "${GALAXY_CONF_DIR}/configurator.lock"
+
 
 if [ "$DONT_EXIT" = "true" ]; then
   echo "Integration test detected. Galaxy Configurator will go to sleep (to not interrupt docker-compose)."

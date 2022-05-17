@@ -57,3 +57,5 @@ compose/export
 compose-v2/export
 
 .DS_Store
+
+.env
