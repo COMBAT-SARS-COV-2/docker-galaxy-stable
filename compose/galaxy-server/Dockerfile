@@ -62,11 +62,9 @@ RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libss
   && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
 WORKDIR $GALAXY_ROOT
 RUN rm -rf ./node_modules
-#RUN yarn upgrade caniuse-lite browserslist
 RUN ./scripts/common_startup.sh
 
 RUN . $GALAXY_ROOT/.venv/bin/activate \
-  && yarn install \
   && pip3 install drmaa psycopg2 pycurl pykube \
   && pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp \
   && deactivate \
