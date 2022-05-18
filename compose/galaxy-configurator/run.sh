@@ -174,9 +174,10 @@ done
 # TODO: Install tools into Galaxy (Singularity)
 galaxy_tools_file="tools.yaml"
 echo "Installing galaxy tools"
-python -m workbench download-jar
-python -m workbench extract-jar
-python -m workbench install-tools
+python3 --version
+python3 -m workbench download-jar
+python3 -m workbench extract-jar
+python3 -m workbench install-tools
 echo "Finished installing galaxy tools"
 
 echo "Finished configuring Galaxy"
