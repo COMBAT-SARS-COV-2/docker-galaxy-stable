@@ -43,7 +43,6 @@ services:
       - GALAXY_CONFIG_CLEANUP_JOB=onsuccess
       - GALAXY_ENABLE_TESTTOOLSHED=true
       - NGINX_OVERWRITE_CONFIG=true
-      - DONT_EXIT=true
     volumes:
       - ${EXPORT_DIR:-./export}/galaxy/config:/galaxy/config
       - ${EXPORT_DIR:-./export}/nginx:/etc/nginx

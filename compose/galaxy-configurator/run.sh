@@ -175,9 +175,9 @@ done
 galaxy_tools_file="tools.yaml"
 echo "Installing galaxy tools"
 python3 --version
-python3 -m workbench download-jar
-python3 -m workbench extract-jar
-python3 -m workbench install-tools
+python3 /workbench.py download-jar
+python3 /workbench.py extract-jar
+python3 /workbench.py install-tools
 echo "Finished installing galaxy tools"
 
 echo "Finished configuring Galaxy"
