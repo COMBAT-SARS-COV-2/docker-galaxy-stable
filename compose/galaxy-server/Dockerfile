@@ -66,7 +66,7 @@ RUN rm -rf ./node_modules
 RUN ./scripts/common_startup.sh
 
 RUN . $GALAXY_ROOT/.venv/bin/activate \
-  && yarn upgrade caniuse-lite browserslist \
+  && yarn install \
   && pip3 install drmaa psycopg2 pycurl pykube \
   && pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp \
   && deactivate \
