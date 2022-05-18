@@ -2,7 +2,7 @@ ARG DOCKER_REGISTRY=quay.io
 ARG DOCKER_REGISTRY_USERNAME=bgruening
 ARG IMAGE_TAG=latest
 
-FROM buildpack-deps:20.04 as build_base
+FROM buildpack-deps:latest as build_base
 
 ENV EXPORT_DIR=/export \
     GALAXY_ROOT=/galaxy \
@@ -56,19 +56,23 @@ ARG GALAXY_REPO=https://github.com/galaxyproject/galaxy
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
 
 # Install Galaxy
-RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip -y
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 9
-RUN mkdir "${GALAXY_ROOT}"
-RUN curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
+RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev yarn npm python3-pip -y \
+  && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
+  && mkdir "${GALAXY_ROOT}" \
+  && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
 WORKDIR $GALAXY_ROOT
-RUN npm install -g yarn
-RUN ./scripts/common_startup.sh
-RUN . $GALAXY_ROOT/.venv/bin/activate
+RUN rm -rf ./node_modules
+RUN npm i -g npx
+RUN npx browserslist@latest --update-db
 RUN yarn upgrade caniuse-lite browserslist
-RUN pip3 install drmaa psycopg2 pycurl pykube
-RUN pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp
-RUN deactivate
-RUN rm -rf .ci .circleci .coveragerc .gitignore .travis.yml CITATION CODE_OF_CONDUCT.md CONTRIBUTING.md CONTRIBUTORS.md \
+RUN ./scripts/common_startup.sh
+
+RUN . $GALAXY_ROOT/.venv/bin/activate \
+  && yarn upgrade caniuse-lite browserslist \
+  && pip3 install drmaa psycopg2 pycurl pykube \
+  && pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp \
+  && deactivate \
+  && rm -rf .ci .circleci .coveragerc .gitignore .travis.yml CITATION CODE_OF_CONDUCT.md CONTRIBUTING.md CONTRIBUTORS.md \
               LICENSE.txt Makefile README.rst SECURITY_POLICY.md pytest.ini tox.ini \
               client contrib doc config/plugins lib/galaxy_test test test-data \
               .venv/lib/node_modules .venv/src/node-v10.15.3-linux-x64 \
