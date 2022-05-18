@@ -2,7 +2,7 @@ ARG DOCKER_REGISTRY=quay.io
 ARG DOCKER_REGISTRY_USERNAME=bgruening
 ARG IMAGE_TAG=latest
 
-FROM buildpack-deps:latest as build_base
+FROM buildpack-deps:20.04 as build_base
 
 ENV EXPORT_DIR=/export \
     GALAXY_ROOT=/galaxy \
@@ -50,7 +50,7 @@ RUN curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSI
 
 FROM build_base as build_galaxy
 
-ARG GALAXY_RELEASE=release_21.01
+ARG GALAXY_RELEASE=release_22.01
 ARG GALAXY_REPO=https://github.com/galaxyproject/galaxy
 
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
@@ -62,7 +62,6 @@ RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libss
   && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
 WORKDIR $GALAXY_ROOT
 RUN rm -rf ./node_modules
-RUN npm i -g npx
 RUN npx browserslist@latest --update-db
 RUN yarn upgrade caniuse-lite browserslist
 RUN ./scripts/common_startup.sh
