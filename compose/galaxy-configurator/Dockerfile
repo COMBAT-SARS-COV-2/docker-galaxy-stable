@@ -6,6 +6,8 @@ RUN apk add --no-cache bash python3 rsync \
 COPY ./templates /templates
 COPY ./customize.py /customize.py
 COPY ./run.sh /usr/bin/run.sh
+
+RUN pip3 install click -y
 COPY ./workbench.py /workbench.py
 
 ENTRYPOINT "/usr/bin/run.sh"
