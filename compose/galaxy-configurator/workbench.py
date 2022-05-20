@@ -1,6 +1,7 @@
 import os
 import subprocess
 import urllib
+import yaml
 
 import click
 from decouple import config
@@ -17,7 +18,7 @@ CONTEXT_SETTINGS = dict(
 )
 
 CURRENT_DIR = os.path.dirname(__file__)
-PATH_TO_PLUGINS = os.path.join(CURRENT_DIR, f"../sources/plugins/")
+PATH_TO_PLUGINS = os.path.join(CURRENT_DIR, f"sources/plugins/")
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -170,7 +171,50 @@ def install_tools():
     This command installs the tools in galaxy
     """
     logger.info("Make the singularity magic happen")
+    file_names = [f for f in os.listdir(PATH_TO_PLUGINS) if os.path.isfile(os.path.join(PATH_TO_PLUGINS, f))]
+
+    tool_files = [get_fullpath_for_tool_yaml(f) for f in file_names]
+    for file in tool_files:
+        read_tool_set_file(file)
+
     pass
+
+
+def get_fullpath_for_tool_yaml(file):
+    """path to the tool yaml file"""
+    base_dir = os.path.join(PATH_TO_PLUGINS, os.path.join(file + '.contents', 'workflows/'))
+    dirs = os.walk(base_dir)
+    dd = [dir_names for dir_names in dirs]
+    return os.path.join(dd[1][0], 'tools.yaml')
+
+
+def read_tool_set_file(tool_file):
+    """
+    Read the tool.yaml file
+    """
+    import json
+
+    # Opening JSON file
+    f = open('data.json')
+
+    # returns JSON object as
+    # a dictionary
+    data = json.load(f)
+
+    # Iterating through the json
+    # list
+    for i in data['emp_details']:
+        print(i)
+
+    # Closing file
+    f.close()
+
+    with open(tool_file) as file:
+        # The FullLoader parameter handles the conversion from YAML
+        # scalar values to Python the dictionary format
+        tool_list = yaml.load(file, Loader=yaml.FullLoader)
+
+        pass
 
 
 @workbench.command()

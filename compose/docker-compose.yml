@@ -49,6 +49,8 @@ services:
       - ${EXPORT_DIR:-./export}/nginx:/etc/nginx
       - ./base_config.yml:/base_config.yml
       - ./galaxy-configurator/templates:/templates
+    networks:
+      - galaxy
   # The database for Galaxy
   postgres:
     image: postgres:12
