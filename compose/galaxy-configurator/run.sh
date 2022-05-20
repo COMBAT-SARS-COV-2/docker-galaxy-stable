@@ -131,9 +131,6 @@ else
   done
 fi
 
-# TODO: IRIDA plugin installation
-
-
 echo "Releasing all locks (except Galaxy) if it didn't happen already"
 locks=("$SLURM_CONF_DIR" "$HTCONDOR_CONF_DIR" "$PULSAR_CONF_DIR" "$KIND_CONF_DIR" "$IRIDA_CONF_DIR")
 for lock in "${locks[@]}"; do
@@ -172,7 +169,6 @@ for conf in "${galaxy_configs[@]}"; do
 done
 
 # TODO: Install tools into Galaxy (Singularity)
-galaxy_tools_file="tools.yaml"
 echo "Installing galaxy tools"
 python3 /workbench.py download-jar
 python3 /workbench.py extract-jar

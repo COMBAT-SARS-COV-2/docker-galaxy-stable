@@ -197,7 +197,7 @@ def get_fullpath_for_tool_yaml(file):
     base_dir = os.path.join(PATH_TO_PLUGINS, os.path.join(file + '.contents', 'workflows/'))
     dirs = os.walk(base_dir)
     dd = [dir_names for dir_names in dirs]
-    return os.path.join(dd[1][0], 'tools.yaml')
+    return os.path.join(dd[-1][0], 'tools.yaml')
 
 
 def read_tool_set_file(tool_file):
