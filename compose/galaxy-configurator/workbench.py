@@ -166,7 +166,11 @@ def deploy_plugin():
 
 
 @workbench.command()
-def install_tools():
+@click.option('--galaxy', default='http://galaxy:9090', help='The targeted Galaxy instance')
+@click.option('--user', default='admin@galaxy.org', help='The username to use accessing the galaxy instance')
+@click.option('--password', default='password', help='Password for the user')
+@click.option('--api-key', default='fakekey', help='API Key token generated for the user')
+def install_tools(galaxy, user, password, api_key):
     """
     This command installs the tools in galaxy
     """
@@ -174,11 +178,19 @@ def install_tools():
     file_names = [f for f in os.listdir(PATH_TO_PLUGINS) if os.path.isfile(os.path.join(PATH_TO_PLUGINS, f))]
 
     tool_files = [get_fullpath_for_tool_yaml(f) for f in file_names]
-    for file in tool_files:
-        read_tool_set_file(file)
+    plugins_tools = [read_tool_set_file(file) for file in tool_files]
 
-    pass
-
+    # run the ephemiris tool to install tools
+    for tools in plugins_tools:
+        for t in tools:
+            try:
+                command = f'shed-tools install -g {galaxy} -a "{api_key}" -u "{user}" -p "{password}" --toolshed {t["tool_shed_url"]} --skip_install_resolver_dependencies ' \
+                          f'--skip_install_repository_dependencies --name "{t["name"]}" --owner "{t["owner"]}" --revisions {" ".join(t["revisions"])} --section_label "{t["tool_panel_section_label"]}"'
+                process = subprocess.Popen(command, shell=True)
+                status = os.waitpid(process.pid, 0)[1]
+            except Exception as e:
+                logger.error(f"Error, while trying to install {t['name']}")
+                raise click.ClickException(f"Something went wrong: {repr(e)}")
 
 def get_fullpath_for_tool_yaml(file):
     """path to the tool yaml file"""
@@ -192,30 +204,10 @@ def read_tool_set_file(tool_file):
     """
     Read the tool.yaml file
     """
-    import json
-
-    # Opening JSON file
-    f = open('data.json')
-
-    # returns JSON object as
-    # a dictionary
-    data = json.load(f)
-
-    # Iterating through the json
-    # list
-    for i in data['emp_details']:
-        print(i)
-
-    # Closing file
-    f.close()
-
     with open(tool_file) as file:
         # The FullLoader parameter handles the conversion from YAML
         # scalar values to Python the dictionary format
-        tool_list = yaml.load(file, Loader=yaml.FullLoader)
-
-        pass
-
+        return [t for t in yaml.load(file, Loader=yaml.FullLoader)['tools']]
 
 @workbench.command()
 def install_wf():
