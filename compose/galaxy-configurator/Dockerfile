@@ -33,7 +33,9 @@ RUN apk add --no-cache --update \
   tk-dev \
   zlib-dev \
   python3-dev \
-  libffi-dev
+  libffi-dev \
+  libxml2-dev \
+  libxslt-dev
 
 RUN pip install j2cli[yaml] jinja2-ansible-filters PyYAML\
     cryptography click coloredlogs configparser\
