@@ -34,6 +34,7 @@ RUN apk add --no-cache --update \
   zlib-dev \
   python3-dev \
   libffi-dev \
+  bzip2-dev \
   libxml2-dev \
   libxslt-dev
 
