@@ -50,7 +50,7 @@ RUN curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSI
 
 FROM build_base as build_galaxy
 
-ARG GALAXY_RELEASE=release_22.01
+ARG GALAXY_RELEASE=release_21.01
 ARG GALAXY_REPO=https://github.com/galaxyproject/galaxy
 
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
