@@ -38,7 +38,7 @@ RUN apk add --no-cache --update \
 RUN pip install j2cli[yaml] jinja2-ansible-filters PyYAML\
     cryptography click coloredlogs configparser\
     contextlib2 requests requests-toolbelt python-decouple\
-    pygithub loguru tqdm pyopenssl
+    pygithub loguru tqdm pyopenssl ephemeris
 
 COPY ./templates /templates
 COPY ./customize.py /customize.py
