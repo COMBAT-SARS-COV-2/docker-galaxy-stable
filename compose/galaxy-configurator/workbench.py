@@ -166,7 +166,7 @@ def deploy_plugin():
 
 
 @workbench.command()
-@click.option('--galaxy', default='http://galaxy-server:90', help='The targeted Galaxy instance')
+@click.option('--galaxy', default='http://nginx:90', help='The targeted Galaxy instance')
 @click.option('--user', default='admin@galaxy.org', help='The username to use accessing the galaxy instance')
 @click.option('--password', default='password', help='Password for the user')
 @click.option('--api-key', default='fakekey', help='API Key token generated for the user')
