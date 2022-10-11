@@ -1,0 +1,6 @@
+click @ file:///Users/runner/miniforge3/conda-bld/click_1648793536253/work
+coloredlogs==15.0.1
+configparser==5.2.0
+contextlib2==21.6.0
+requests @ file:///opt/conda/conda-bld/requests_1641824580448/work
+requests-toolbelt==0.9.1

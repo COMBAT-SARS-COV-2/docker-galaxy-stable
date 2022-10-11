@@ -43,11 +43,14 @@ services:
       - GALAXY_CONFIG_CLEANUP_JOB=onsuccess
       - GALAXY_ENABLE_TESTTOOLSHED=true
       - NGINX_OVERWRITE_CONFIG=true
+      - DONT_EXIT=true
     volumes:
       - ${EXPORT_DIR:-./export}/galaxy/config:/galaxy/config
       - ${EXPORT_DIR:-./export}/nginx:/etc/nginx
       - ./base_config.yml:/base_config.yml
       - ./galaxy-configurator/templates:/templates
+    networks:
+      - galaxy
   # The database for Galaxy
   postgres:
     image: postgres:12
@@ -93,4 +96,4 @@ networks:
   galaxy:
     driver: bridge
     driver_opts:
-      com.docker.network.driver.mtu: 1450
+      com.docker.network.driver.mtu: 1400
